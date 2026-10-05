@@ -8,9 +8,12 @@ from aiogram.enums import MessageEntityType
 from aiogram.types import InputMediaPhoto
 from aiogram.types import Message as TGMessage
 from aiogram.types import MessageEntity, URLInputFile
+from dotenv import load_dotenv
 from pymax import Message, WebClient
 from pymax.types import PhotoAttachment
 from pymax.types.domain.message import ForwardLink, ReplyLink
+
+load_dotenv()
 
 BOT_TOKEN = getenv("BOT_TOKEN")
 PROXY = getenv("PROXY")
