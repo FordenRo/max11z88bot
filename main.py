@@ -183,7 +183,7 @@ async def on_start(client: WebClient):
 
 async def main():
     await client.connect()
-    await dispatcher.start_polling(bot)
+    await dispatcher.start_polling(bot, allowed_updates=None)
     await client.stop()
     con.commit()
     con.close()
