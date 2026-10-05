@@ -157,6 +157,30 @@ async def on_message(message: Message, client: WebClient):
     con.commit()
 
 
+async def fetch_and_send_last_messages(client: WebClient):
+    cur.execute("SELECT max_id FROM messages ORDER BY rowid DESC LIMIT 1")
+    result = cur.fetchone()
+    if not result:
+        return
+
+    last_message_id = result[0]
+    last_message = await client.get_message(MAX_CHAT_ID, last_message_id)
+    if not last_message:
+        return
+
+    messages = await client.fetch_history(
+        MAX_CHAT_ID,
+        backward_time=last_message.time,
+    )
+    for i in messages[1:]:
+        on_message(i, client)
+
+
+@client.on_start()
+async def on_start(client: WebClient):
+    await fetch_and_send_last_messages(client)
+
+
 async def main():
     await client.connect()
     await dispatcher.start_polling(bot)
