@@ -43,7 +43,7 @@ def len16(text: str):
 
 @client.on_message()
 async def on_message(message: Message, client: WebClient, force=False):
-    if (message.chat_id != MAX_CHAT_ID or not message.sender) and not force:
+    if message.chat_id != MAX_CHAT_ID and not force or not message.sender:
         return
 
     sender = await client.get_user(message.sender)
@@ -170,7 +170,7 @@ async def fetch_and_send_last_messages(client: WebClient):
 
     messages = await client.fetch_history(MAX_CHAT_ID, backward_time=last_message.time)
     for i in messages[1:]:
-        await on_message(i, client, True)
+        await on_message(i, client, True)  # type: ignore
 
 
 @client.on_start()
