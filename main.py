@@ -9,7 +9,7 @@ from aiogram.types import InputMediaPhoto
 from aiogram.types import Message as TGMessage
 from aiogram.types import MessageEntity, URLInputFile
 from dotenv import load_dotenv
-from pymax import Message, WebClient
+from pymax import ExtraConfig, Message, WebClient
 from pymax.types import PhotoAttachment
 from pymax.types.domain.message import ForwardLink, ReplyLink
 
@@ -173,7 +173,7 @@ async def fetch_and_send_last_messages(client: WebClient):
         backward_time=last_message.time,
     )
     for i in messages[1:]:
-        on_message(i, client)
+        await on_message(i, client)
 
 
 @client.on_start()
@@ -182,9 +182,7 @@ async def on_start(client: WebClient):
 
 
 async def main():
-    await client.connect()
-    await dispatcher.start_polling(bot, allowed_updates=None)
-    await client.stop()
+    await client.start()
     con.commit()
     con.close()
 
